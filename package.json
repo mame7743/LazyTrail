@@ -5,6 +5,10 @@
   "version": "0.1.0",
   "publisher": "lazytrail",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mame7743/LazyTrail.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -146,11 +150,13 @@
     "build": "node esbuild.js --production",
     "watch": "node esbuild.js --watch",
     "compile": "tsc -p . --noEmit",
-    "typecheck": "tsc -p . --noEmit"
+    "typecheck": "tsc -p . --noEmit",
+    "package": "vsce package --out lazytrail.vsix"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.19.11",
     "typescript": "^5.3.3"
   }

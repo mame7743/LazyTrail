@@ -15,6 +15,14 @@ npm run typecheck
 
 `F5` でExtension Development Hostを起動して動作確認できます。
 
+## VSIXパッケージング
+
+```bash
+npm run package     # lazytrail.vsix をローカルに生成（@vscode/vsce使用）
+```
+
+`v*.*.*` 形式のタグをpushするか、GitHub Actionsの `Build Draft VSIX Release` ワークフローを手動実行（`workflow_dispatch`）すると、vsixをビルドして **draft** のGitHub Releaseとして添付します。内容を確認してから手動でPublishしてください。
+
 ## 主な機能
 
 - **Initialize Project**: 未初期化フォルダに `README.md` を追加して初回コミットし、`main` → `dev` → 初期Work（`work/initial-development`）を自動作成、worktreeを開きます。

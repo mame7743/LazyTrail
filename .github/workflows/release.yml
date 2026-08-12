@@ -1,0 +1,47 @@
+name: Build Draft VSIX Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.1.0). Defaults to the version in package.json."
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-vsix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npx vsce package --out lazytrail.vsix
+
+      - id: version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "tag=v${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "tag=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          else
+            v=$(node -p "require('./package.json').version")
+            echo "tag=v$v" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          draft: true
+          files: lazytrail.vsix
+          generate_release_notes: true
