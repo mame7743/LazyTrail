@@ -1,0 +1,157 @@
+{
+  "name": "lazytrail",
+  "displayName": "LazyTrail",
+  "description": "コードを書く。履歴は勝手に残る。 — 面倒なGit運用を自動化する開発履歴支援拡張。",
+  "version": "0.1.0",
+  "publisher": "lazytrail",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "lazytrail",
+          "title": "LazyTrail",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "lazytrail": [
+        {
+          "id": "lazytrail.workManager",
+          "name": "Works"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "lazytrail.initializeProject",
+        "title": "LazyTrail: Initialize Project"
+      },
+      {
+        "command": "lazytrail.newWork",
+        "title": "LazyTrail: New Work",
+        "icon": "$(add)"
+      },
+      {
+        "command": "lazytrail.switchWork",
+        "title": "LazyTrail: Switch Work"
+      },
+      {
+        "command": "lazytrail.reviewAndCommit",
+        "title": "LazyTrail: Review & Commit",
+        "icon": "$(check)"
+      },
+      {
+        "command": "lazytrail.finishWork",
+        "title": "LazyTrail: Finish Work"
+      },
+      {
+        "command": "lazytrail.showHistory",
+        "title": "LazyTrail: Show Snapshot History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "lazytrail.refreshWorkManager",
+        "title": "LazyTrail: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "lazytrail.syncNow",
+        "title": "LazyTrail: Sync Now"
+      },
+      {
+        "command": "lazytrail.verifyNow",
+        "title": "LazyTrail: Verify Now (L2)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "lazytrail.newWork",
+          "when": "view == lazytrail.workManager",
+          "group": "navigation"
+        },
+        {
+          "command": "lazytrail.refreshWorkManager",
+          "when": "view == lazytrail.workManager",
+          "group": "navigation"
+        },
+        {
+          "command": "lazytrail.showHistory",
+          "when": "view == lazytrail.workManager",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "LazyTrail",
+      "properties": {
+        "lazytrail.verifyCommand": {
+          "type": "string",
+          "default": "",
+          "description": "L2検証で実行するコマンド（例: npm test）。空の場合L2検証は無効。"
+        },
+        "lazytrail.reviewPressure.yellowLines": {
+          "type": "number",
+          "default": 150,
+          "description": "Review PressureがYellowになる変更行数(+/-合計)のしきい値。"
+        },
+        "lazytrail.reviewPressure.redLines": {
+          "type": "number",
+          "default": 400,
+          "description": "Review PressureがRedになる変更行数(+/-合計)のしきい値。"
+        },
+        "lazytrail.reviewPressure.yellowFiles": {
+          "type": "number",
+          "default": 8,
+          "description": "Review PressureがYellowになる変更ファイル数のしきい値。"
+        },
+        "lazytrail.reviewPressure.redFiles": {
+          "type": "number",
+          "default": 20,
+          "description": "Review PressureがRedになる変更ファイル数のしきい値。"
+        },
+        "lazytrail.autoWipDebounceMs": {
+          "type": "number",
+          "default": 2000,
+          "description": "ファイル保存からAuto WIP Snapshotまでのdebounce時間(ms)。"
+        },
+        "lazytrail.worktreeRoot": {
+          "type": "string",
+          "default": "",
+          "description": "worktreeを作成するルートディレクトリ。空の場合リポジトリの親ディレクトリ配下に作成。"
+        },
+        "lazytrail.autoPush": {
+          "type": "boolean",
+          "default": true,
+          "description": "Review & Commit後に自動でpushする。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.js --production",
+    "watch": "node esbuild.js --watch",
+    "compile": "tsc -p . --noEmit",
+    "typecheck": "tsc -p . --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.19.11",
+    "typescript": "^5.3.3"
+  }
+}
